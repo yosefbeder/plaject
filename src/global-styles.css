@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Roboto:wght@300;400;500;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-primary: #2bae66;
+  --color-primary-light: #5ad190;
+  --color-primary-transparent-5: #2bae6650;
+  --color-primary-transparent-3: #2bae6630;
+  --color-primary-transparent-2: #2bae6620;
+  --color-white: #fff;
+  --color-black: #4a4e4d;
+
+  --color-grey-light: #f5f5f5;
+  --color-grey: #d8d8d8;
+  --color-grey-dark: #999999;
+
+  --border-thick: 1px solid var(--color-black);
+  --border-thin: 1px solid var(--color-grey);
+
+  /*
+    color-pallette for project
+  */
+
+  --color-red: #fc2847;
+  --color-orange: #ffa343;
+  --color-yellow: #fdfc74;
+  --color-yellow-transparent-3: #fdfc7430;
+  --color-yellow-transparent-5: #fdfc7450;
+  --color-green: #71bc78;
+  --color-blue: #0f4c81;
+  --color-purple: #7442c8;
+  --color-pink: #fb7efd;
+
+  /* 
+    Sizes
+  */
+
+  --font-h1: normal normal 500 2.2rem/1 'Roboto', sans-serif;
+  --font-h2: normal normal 400 1.8rem/1 'Roboto', sans-serif;
+  --font-h3: normal normal 600 1.4rem/1 'Roboto', sans-serif;
+}
+
+#app-root,
+#modal-root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+#modal-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1200;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--color-black);
+}
+
+h1 {
+  font: var(--font-h1);
+}
+
+h2 {
+  font: var(--font-h2);
+}
+
+h3 {
+  font: var(--font-h3);
+}
+
+.input:focus {
+  border: 1px solid inherit;
+}
+
+.option,
+#select {
+  display: flex;
+  align-items: center;
+}
+
+.option .color,
+#select .color {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.color-red {
+  background-color: var(--color-red);
+}
+
+.color-orange {
+  background-color: var(--color-orange);
+}
+
+.color-yellow {
+  background-color: var(--color-yellow);
+}
+
+.color-green {
+  background-color: var(--color-green);
+}
+
+.color-blue {
+  background-color: var(--color-blue);
+}
+
+.color-pink {
+  background-color: var(--color-pink);
+}
+
+.color-purple {
+  background-color: var(--color-purple);
+}
