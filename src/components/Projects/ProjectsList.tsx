@@ -15,9 +15,9 @@ const Container = styled.div`
   margin: 1.5rem 0;
   width: 100%;
 
-  @media (max-width: 600px) {
+  /* @media (max-width: 600px) {
     width: 75%;
-  }
+  } */
 `;
 
 const ProjectsList: React.FC<{
@@ -29,7 +29,6 @@ const ProjectsList: React.FC<{
   const projects = useAppSelector(state => state.auth.userInfo!.projects);
   const selectedProject = useAppSelector(state => state.app.selectedProject);
   const dispatch = useAppDispatch();
-  const history = useHistory();
 
   useEffect(() => {
     // now you just need to dispatch actions to the project array and it'll be sent to the db automatically.

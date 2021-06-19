@@ -2,14 +2,13 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
-import Modal from '../UI/Modal';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { authActions } from '../store/auth-slice';
-import { UserInfo } from '../types';
 import LoadingPage from '../pages/LoadingPage';
+import { setTimeout } from 'timers';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -48,32 +47,30 @@ function App() {
     });
   }, []);
 
-  // return isLoading ? (
-  //   <LoadingPage />
-  // ) : (
-  //   <Switch>
-  //     {/* default routes */}
+  return isLoading ? (
+    <LoadingPage noQuote />
+  ) : (
+    <Switch>
+      {/* default routes */}
 
-  //     <Route path="/login">
-  //       {!userId && !isLoading && <Login />}
-  //       {userId && <div>You're already logged in, {userInfo!.name}</div>}
+      <Route path="/login">
+        {!userId && !isLoading && <Login />}
+        {userId && <Redirect to={`/project/${userInfo!.projects[0].id}`} />}
+        {}
+      </Route>
+      <Route path="/project/:projectId">
+        {userId && <Home />}
+        {!userId && !isLoading && <Redirect to="/login" />}
+      </Route>
 
-  //       {}
-  //     </Route>
-  //     <Route path="/projects/:projectId">
-  //       {userId && <Home />}
-  //       {!userId && !isLoading && <div>You should login first</div>}
-  //     </Route>
+      {/* unexpected routes */}
 
-  //     {/* unexpected routes */}
-
-  //     <Route path="*">
-  //       {userId && <Redirect to={`/projects/${userInfo!.projects[0].id}`} />}
-  //       {!userId && !isLoading && <Redirect to="/login" />}
-  //     </Route>
-  //   </Switch>
-  // );
-  return <LoadingPage />;
+      <Route path="*">
+        {userId && <Redirect to={`/project/${userInfo!.projects[0].id}`} />}
+        {!userId && !isLoading && <Redirect to="/login" />}
+      </Route>
+    </Switch>
+  );
 }
 
 export default App;

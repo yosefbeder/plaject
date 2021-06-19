@@ -43,6 +43,7 @@
   --font-h1: normal normal 500 2.2rem/1 'Roboto', sans-serif;
   --font-h2: normal normal 400 1.8rem/1 'Roboto', sans-serif;
   --font-h3: normal normal 600 1.4rem/1 'Roboto', sans-serif;
+  --font-text: normal normal 400 1rem/1 'Roboto', sans-serif;
 }
 
 #app-root,

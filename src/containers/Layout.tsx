@@ -3,6 +3,7 @@ import Card from '../UI/Card';
 import styled from 'styled-components';
 import Sidebar from '../components/Sidebar/Sidebar';
 import Main from './Main';
+import CardDetails from '../components/Cards/CardDetails';
 
 const Container = styled(Card)`
   position: relative;
@@ -16,7 +17,7 @@ const Container = styled(Card)`
 `;
 
 export default function Layout() {
-  const [sidebarIsOpened, setSidebarIsOpened] = useState(true);
+  const [sidebarIsOpened, setSidebarIsOpened] = useState(false);
 
   const openSidebar = () => setSidebarIsOpened(true);
   const closeSidebar = () => setSidebarIsOpened(false);

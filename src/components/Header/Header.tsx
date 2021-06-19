@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   BoxArrowRight,
@@ -8,10 +8,8 @@ import {
 import { IconButton } from '@material-ui/core';
 import Profile from './Profile';
 import DropdownWithLabel from '../../UI/DropdownWithLabel';
-import HiddenInput from '../../UI/HiddenInput';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { UserInfo } from 'os';
-import { authActions } from '../../store/auth-slice';
+
 import { auth } from '../../firebase';
 
 const Container = styled.div`
@@ -67,7 +65,7 @@ const Header: React.FC<{ openSidebar: () => void }> = ({ openSidebar }) => {
           },
           { Icon: BoxArrowRight, content: 'Logout', onClick: signOut },
         ]}
-        alignRight={true}
+        responsive={true}
       >
         <Profile />
       </DropdownWithLabel>

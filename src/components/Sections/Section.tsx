@@ -4,11 +4,9 @@ import { PlusLg, Trash } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Card from '../Cards/Card';
-import { useState } from 'react';
-import HiddenInput from '../../UI/HiddenInput';
 import { useAppDispatch } from '../../store/hooks';
 import { appActions } from '../../store/app-slice';
-import { db } from '../../firebase';
+import Input from '../../UI/Input';
 
 const Container = styled.div`
   flex: 0 0 max-content;
@@ -28,7 +26,7 @@ const Container = styled.div`
   }
 
   & > .header > .title {
-    margin-right: 4rem;
+    width: 10rem;
   }
 
   & .cards-list {
@@ -55,31 +53,27 @@ const Section = React.forwardRef<any, SectionProps>(
   ({ id, name, cards, draggableProps, dragHandleProps }, ref) => {
     const dispatch = useAppDispatch();
 
-    const changeSectionName = (e: React.ChangeEvent<HTMLInputElement>) => {
-      // dispatch the action
-      dispatch(appActions.updateSectionName({ id, name: e.target.value }));
-    };
-
-    const deleteSection = () => {
-      dispatch(appActions.deleteSection(id));
-    };
-
     return (
       <Container {...draggableProps} ref={ref}>
         <div className="header" {...dragHandleProps}>
-          <HiddenInput
+          <Input
             value={name}
-            onChange={changeSectionName}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // dispatch the action
+              dispatch(appActions.setSectionName({ id, name: e.target.value }));
+            }}
             variant="h3"
             className="title"
           />
           <IconButton
             style={{ marginLeft: 'auto', marginRight: '.25rem' }}
-            onClick={deleteSection}
+            onClick={() => {
+              dispatch(appActions.deleteSection(id));
+            }}
           >
             <Trash size={20} />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={() => dispatch(appActions.addCard(id))}>
             <PlusLg size={18} />
           </IconButton>
         </div>
@@ -99,7 +93,7 @@ const Section = React.forwardRef<any, SectionProps>(
                         id={card.id}
                         sectionId={id}
                         title={card.title}
-                        hasDescription={card.description.length > 0}
+                        hasDescription={card.description.trim().length > 0}
                         checklistInfo={{
                           total: card.checklist.length,
                           checked: card.checklist.filter(

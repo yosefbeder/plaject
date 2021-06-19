@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 import Dropdown from './Dropdown';
 
-const Container = styled.div<{ alignRight?: boolean; isOpened: boolean }>`
+const Container = styled.div<{ responsive?: boolean; isOpened: boolean }>`
   position: relative;
   z-index: ${props => (props.isOpened ? '20' : '10')};
 
@@ -32,18 +32,6 @@ const Container = styled.div<{ alignRight?: boolean; isOpened: boolean }>`
       transition: opacity 200ms;
     }
   }
-
-  @media (max-width: 600px) {
-    & .dropdown-container {
-      ${props =>
-        props.alignRight &&
-        `
-        left: auto;
-        right: 0;
-        transform: translate(0, 0);
-        `}
-    }
-  }
 `;
 
 interface ListItem {
@@ -54,14 +42,14 @@ interface ListItem {
 
 const DropdownWithLabel: React.FC<{
   listItems: ListItem[];
-  alignRight?: boolean;
+  responsive?: boolean;
   className?: string;
-}> = ({ children, listItems, alignRight, className }) => {
+}> = ({ children, listItems, responsive, className }) => {
   const [isOpened, setIsOpened] = useState(false);
 
   return (
     <Container
-      alignRight={alignRight}
+      responsive={responsive}
       isOpened={isOpened}
       onClick={e => {
         e.stopPropagation();
@@ -79,7 +67,7 @@ const DropdownWithLabel: React.FC<{
       >
         <ClickAwayListener onClickAway={() => setIsOpened(false)}>
           <div className="dropdown-container">
-            <Dropdown items={listItems} alignRight={alignRight} />
+            <Dropdown items={listItems} responsive={responsive} />
           </div>
         </ClickAwayListener>
       </CSSTransition>

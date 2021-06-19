@@ -1,18 +1,22 @@
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Layout from '../containers/Layout';
 import { auth, db } from '../firebase';
 import { appActions } from '../store/app-slice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { Project } from '../types';
+import LoadingPage from './LoadingPage';
+import { Route } from 'react-router-dom';
+import CardDetails from '../components/Cards/CardDetails';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const { projectId } = useParams<{ projectId: string }>();
   const userInfo = useAppSelector(state => state.auth.userInfo);
   const dispatch = useAppDispatch();
+  const history = useHistory();
 
   const fetchProjectData = async (id: string): Promise<Project> => {
     const doc = await db.collection('projects').doc(id).get();
@@ -34,5 +38,5 @@ export default function Home() {
     // dispatch the data to the app slice
   }, [projectId]);
 
-  return isLoading ? <div></div> : <Layout />;
+  return isLoading ? <LoadingPage noQuote={true} /> : <Layout />;
 }

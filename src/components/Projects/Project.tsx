@@ -5,6 +5,7 @@ import {
   Heart,
   PencilSquare,
   Trash,
+  HeartFill,
 } from 'react-bootstrap-icons';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
@@ -161,7 +162,7 @@ const Project = React.forwardRef<any, ProjectProps>(
 
     const listItems = [
       {
-        Icon: Heart,
+        Icon: inFavorite ? HeartFill : Heart,
         content: `${inFavorite ? 'Unfavourite' : 'Favourite'}`,
         onClick: toggleFavorite,
       },
@@ -200,7 +201,7 @@ const Project = React.forwardRef<any, ProjectProps>(
           >
             <div className="color"></div>
             <div className="content">{name}</div>
-            <DropdownWithLabel listItems={listItems}>
+            <DropdownWithLabel listItems={listItems} responsive={true}>
               <IconButton>
                 <ThreeDotsVertical color="inherit" />
               </IconButton>

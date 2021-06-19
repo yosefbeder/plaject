@@ -5,12 +5,12 @@ import styled from 'styled-components';
 import Overlay from './Overlay';
 import { CSSTransition } from 'react-transition-group';
 
-const Container = styled(Card)`
+const Container = styled(Card)<{ height?: number }>`
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: max-content;
+  height: ${props => (props.height ? `${props.height}px` : 'max-content')};
   z-index: 10;
   background-color: var(--color-white);
   box-shadow: none;
@@ -41,7 +41,8 @@ const Modal: React.FC<{
   showIn: boolean;
   onClickAway: () => void;
   width: number;
-}> = ({ width, showIn, onClickAway, children }) => {
+  height?: number;
+}> = ({ width, showIn, onClickAway, height, children }) => {
   return ReactDOM.createPortal(
     <>
       <Overlay
@@ -57,7 +58,9 @@ const Modal: React.FC<{
         unmountOnExit
         timeout={300}
       >
-        <Container width={width}>{children}</Container>
+        <Container height={height} width={width} isModal={true}>
+          {children}
+        </Container>
       </CSSTransition>
     </>,
     document.getElementById('modal-root')!,

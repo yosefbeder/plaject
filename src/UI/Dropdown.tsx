@@ -4,7 +4,7 @@ import styled from 'styled-components';
 // icons
 import { Icon } from 'react-bootstrap-icons';
 
-const Container = styled.ul<{ alignRight?: boolean }>`
+const Container = styled.ul<{ responsive?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -49,16 +49,18 @@ const Container = styled.ul<{ alignRight?: boolean }>`
       background-color: var(--color-grey-light);
     }
   }
-  @media (max-width: 600px) {
-    &::before {
-      ${props =>
-        props.alignRight &&
-        `
-        left: auto;
-        right: 0.85rem;
-      `}
+
+  ${props =>
+    props.responsive &&
+    `
+    @media (max-width: 600px) {
+      width: max-content;
+
+      & li .content {
+        display: none;
+      }
     }
-  }
+  `}
 `;
 
 interface ListItem {
@@ -67,12 +69,12 @@ interface ListItem {
   onClick: () => void;
 }
 
-const Dropdown: React.FC<{ items: ListItem[]; alignRight?: boolean }> = ({
+const Dropdown: React.FC<{ items: ListItem[]; responsive?: boolean }> = ({
   items,
-  alignRight,
+  responsive,
 }) => {
   return (
-    <Container alignRight={alignRight}>
+    <Container responsive={responsive}>
       {items.map(({ Icon, content, onClick }, index) => (
         <li key={index} onClick={onClick}>
           <Icon className="icon" />
