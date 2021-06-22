@@ -26,15 +26,17 @@ const LoadingPage: React.FC<{ noQuote?: boolean }> = ({ noQuote }) => {
   const [author, setAuthor] = useState('');
 
   useEffect(() => {
-    fetch('https://api.quotable.io/random')
-      .then(response => response.json())
-      .then(data => {
-        setQuote(data.content);
-        setAuthor(data.author);
-      })
-      .catch(err => {
-        setQuote('The creative adult is the child who survived');
-      });
+    if (!noQuote) {
+      fetch('https://api.quotable.io/random')
+        .then(response => response.json())
+        .then(data => {
+          setQuote(data.content);
+          setAuthor(data.author);
+        })
+        .catch(err => {
+          setQuote('The creative adult is the child who survived');
+        });
+    }
   }, []);
 
   return (

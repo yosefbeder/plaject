@@ -1,5 +1,5 @@
 import { ClickAwayListener } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Icon } from 'react-bootstrap-icons';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
@@ -46,6 +46,7 @@ const DropdownWithLabel: React.FC<{
   className?: string;
 }> = ({ children, listItems, responsive, className }) => {
   const [isOpened, setIsOpened] = useState(false);
+  const nodeRef = useRef(null);
 
   return (
     <Container
@@ -58,19 +59,20 @@ const DropdownWithLabel: React.FC<{
       className={className}
     >
       {children}
-      <CSSTransition
-        timeout={300}
-        in={isOpened}
-        classNames="fade"
-        unmountOnExit
-        mountOnEnter
-      >
-        <ClickAwayListener onClickAway={() => setIsOpened(false)}>
-          <div className="dropdown-container">
+      <ClickAwayListener onClickAway={() => setIsOpened(false)}>
+        <CSSTransition
+          timeout={300}
+          in={isOpened}
+          classNames="fade"
+          unmountOnExit
+          mountOnEnter
+          nodeRef={nodeRef}
+        >
+          <div className="dropdown-container" ref={nodeRef}>
             <Dropdown items={listItems} responsive={responsive} />
           </div>
-        </ClickAwayListener>
-      </CSSTransition>
+        </CSSTransition>
+      </ClickAwayListener>
     </Container>
   );
 };

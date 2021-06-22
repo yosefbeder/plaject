@@ -9,7 +9,6 @@ import {
 } from 'react-bootstrap-icons';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { appActions } from '../../store/app-slice';
 import { authActions } from '../../store/auth-slice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import DropdownWithLabel from '../../UI/DropdownWithLabel';
@@ -64,6 +63,7 @@ const MainBody = styled.div<{
   }
 
   & .content {
+    flex: 1;
     margin: 0 auto 0 0;
   }
 
@@ -140,7 +140,7 @@ const Project = React.forwardRef<any, ProjectProps>(
     const projects = useAppSelector(state => state.auth.userInfo!.projects);
 
     const onSelect = (e: React.MouseEvent) => {
-      history.push(`/projects/${id}`);
+      history.push(`/project/${id}`);
     };
 
     const toggleFavorite = () => {

@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { useRef } from 'react';
 import Card from './Card';
 import styled from 'styled-components';
 import Overlay from './Overlay';
@@ -43,6 +43,8 @@ const Modal: React.FC<{
   width: number;
   height?: number;
 }> = ({ width, showIn, onClickAway, height, children }) => {
+  const nodeRef = useRef(null);
+
   return ReactDOM.createPortal(
     <>
       <Overlay
@@ -51,14 +53,16 @@ const Modal: React.FC<{
         showIn={showIn}
         responsive={false}
       />
+
       <CSSTransition
         classNames="animation"
         in={showIn}
         mountOnEnter
         unmountOnExit
         timeout={300}
+        nodeRef={nodeRef}
       >
-        <Container height={height} width={width} isModal={true}>
+        <Container ref={nodeRef} height={height} width={width} isModal={true}>
           {children}
         </Container>
       </CSSTransition>

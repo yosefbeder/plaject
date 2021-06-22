@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import styled from 'styled-components';
 
@@ -42,6 +42,8 @@ const Overlay: React.FC<{
   zIndex: number;
   responsive: boolean;
 }> = ({ showIn, onClick, zIndex, responsive }) => {
+  const nodeRef = useRef(null);
+
   return (
     <CSSTransition
       in={showIn}
@@ -49,8 +51,14 @@ const Overlay: React.FC<{
       timeout={300}
       unmountOnExit
       mountOnEnter
+      nodeRef={nodeRef}
     >
-      <Container zIndex={zIndex} onClick={onClick} responsive={responsive} />
+      <Container
+        ref={nodeRef}
+        zIndex={zIndex}
+        onClick={onClick}
+        responsive={responsive}
+      />
     </CSSTransition>
   );
 };

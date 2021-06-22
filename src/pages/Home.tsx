@@ -1,9 +1,7 @@
-import React from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import Layout from '../containers/Layout';
-import { auth, db } from '../firebase';
+import { db } from '../firebase';
 import { appActions } from '../store/app-slice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { Project } from '../types';
@@ -17,6 +15,7 @@ export default function Home() {
   const userInfo = useAppSelector(state => state.auth.userInfo);
   const dispatch = useAppDispatch();
   const history = useHistory();
+  const selectedProject = useAppSelector(state => state.app.selectedProject);
 
   const fetchProjectData = async (id: string): Promise<Project> => {
     const doc = await db.collection('projects').doc(id).get();
@@ -35,8 +34,21 @@ export default function Home() {
         setIsLoading(false);
       })();
     }
-    // dispatch the data to the app slice
   }, [projectId]);
 
-  return isLoading ? <LoadingPage noQuote={true} /> : <Layout />;
+  return isLoading ? (
+    <LoadingPage noQuote={true} />
+  ) : (
+    <>
+      <Layout />
+      <Route path={`/project/${selectedProject}/card/:cardId`}>
+        {({ match }) => (
+          <CardDetails
+            showIn={match != null}
+            onClose={() => history.push(`/project/${selectedProject}`)}
+          />
+        )}
+      </Route>
+    </>
+  );
 }

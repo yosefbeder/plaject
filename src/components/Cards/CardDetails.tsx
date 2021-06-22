@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Card from '../../UI/Card';
 import Modal from '../../UI/Modal';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import {
-  Trash,
   XLg,
   X,
   CardHeading,
@@ -13,12 +11,15 @@ import {
   ListCheck,
   PlusLg,
 } from 'react-bootstrap-icons';
-import MDEditor from '@uiw/react-md-editor';
 import Input from '../../UI/Input';
 import Button from '../../UI/Button';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { appActions } from '../../store/app-slice';
 import { useParams } from 'react-router-dom';
+
+import ReactMde from 'react-mde';
+import MDEditor from '@uiw/react-md-editor';
+import 'react-mde/lib/styles/css/react-mde-all.css';
 
 const Header = styled.div`
   display: flex;
@@ -51,19 +52,35 @@ const NewCheckbox = styled(Button)`
   margin: 1rem;
 `;
 
+const MarkdownContainer = styled.div`
+  margin: 1rem;
+`;
+
 const CardDetails: React.FC<{
   showIn: boolean;
   onClose: () => void;
-  id: string;
-}> = ({ showIn, onClose, id }) => {
+}> = ({ showIn, onClose }) => {
+  const { cardId } = useParams<{ cardId: string }>();
+  const [id, setId] = useState(cardId);
+
+  useEffect(() => {
+    if (!cardId)
+      setTimeout(() => {
+        setId(cardId);
+      }, 300);
+    if (cardId) setId(cardId);
+  }, [cardId]);
+
   const dispatch = useAppDispatch();
-  const title = useAppSelector(state => state.app.projectData!.cards[id].title);
-  const description = useAppSelector(
-    state => state.app.projectData!.cards[id].description,
+  const title = useAppSelector(
+    state => state.app.projectData!.cards[id]?.title,
   );
-  const [isEditing, setIsEditing] = useState(false);
+  const description = useAppSelector(
+    state => state.app.projectData!.cards[id]?.description,
+  );
+  const [selectedTab, setSelectedTab] = useState<'write' | 'preview'>('write');
   const checklist = useAppSelector(
-    state => state.app.projectData!.cards[id].checklist,
+    state => state.app.projectData!.cards[id]?.checklist,
   );
 
   return (
@@ -78,7 +95,7 @@ const CardDetails: React.FC<{
         <CardHeading size={32} />
         <Input
           variant="h2"
-          value={title}
+          value={title || ''}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             if (e.target.value.length < 26)
               dispatch(appActions.setCardTitle({ id, value: e.target.value }));
@@ -90,30 +107,27 @@ const CardDetails: React.FC<{
         <JustifyLeft size={32} />
         <h2>Description</h2>
       </Header>
-
-      <MDEditor
-        value={description}
-        onChange={value =>
-          dispatch(appActions.setCardDescription({ id, value }))
-        }
-        style={{ margin: '1rem' }}
-        hideToolbar
-        visiableDragbar={false}
-        enableScroll={false}
-        height={350}
-        preview={isEditing ? 'edit' : 'preview'}
-        onClick={() => setIsEditing(true)}
-        onBlur={() => setIsEditing(false)}
-      />
+      <MarkdownContainer>
+        <ReactMde
+          value={description}
+          onChange={value =>
+            dispatch(appActions.setCardDescription({ id, value }))
+          }
+          selectedTab={selectedTab}
+          onTabChange={setSelectedTab}
+          generateMarkdownPreview={markdown =>
+            Promise.resolve(<MDEditor.Markdown source={markdown} />)
+          }
+        />
+      </MarkdownContainer>
 
       <Header>
         <ListCheck size={32} />
         <h2>Checklist</h2>
       </Header>
-
       <Checklist>
-        {checklist!.map(({ id: checkboxId, isChecked, content }) => (
-          <li>
+        {checklist?.map(({ id: checkboxId, isChecked, content }) => (
+          <li key={checkboxId}>
             <Checkbox
               color="default"
               checked={isChecked}

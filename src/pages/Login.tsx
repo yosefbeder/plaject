@@ -5,26 +5,20 @@ import Button from '../UI/Button';
 import styled from 'styled-components';
 import LoginCover from '../assets/login-cover.png';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
-
-// icons
 import { Google as GoogleIcon } from 'react-bootstrap-icons';
 import { auth, db, GoogleProvider } from '../firebase';
-import { useAppDispatch } from '../store/hooks';
-import { authActions } from '../store/auth-slice';
-import {
-  collapseTextChangeRangesAcrossMultipleVersions,
-  StringMappingType,
-} from 'typescript';
 import { Color, Project, UserInfo } from '../types';
-import { useHistory } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  gap: 1rem;
   padding: 1rem;
+
+  & > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const Cover = styled.div`
@@ -95,8 +89,6 @@ const getRandomColor = (): Color => {
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const history = useHistory();
-  const dispatch = useAppDispatch();
 
   const state =
     !isLoading && !hasError ? 'intial' : isLoading ? 'loading' : 'error';
@@ -123,6 +115,7 @@ export default function Login() {
 
         // adding the default project for that user
         const defaultProject: Project = {
+          ownerUid: userId,
           sectionsOrder: ['s1', 's2', 's3', 's4'],
           sections: {
             s1: { id: 's1', name: 'TODO', cards: ['c1', 'c2', 'c3'] },
@@ -169,8 +162,6 @@ export default function Login() {
         };
         const project_1Id = db.collection('projects').doc().id;
         db.collection('projects').doc(project_1Id).set(defaultProject);
-        const project_2Id = db.collection('projects').doc().id;
-        db.collection('projects').doc(project_2Id).set(defaultProject);
 
         // adding the user entry
 
@@ -186,20 +177,15 @@ export default function Login() {
               isDefault: true,
               inFavorite: false,
             },
-            {
-              id: project_2Id,
-              name: 'Experamental Project',
-              color: getRandomColor(),
-              inFavorite: false,
-            },
           ],
         };
         db.collection('users').doc(userId).set(userInfo);
+        setIsLoading(false);
       }
     } catch (err) {
       setHasError(true);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -222,7 +208,7 @@ export default function Login() {
           projects.
         </p>
         <Cover>
-          <img src={LoginCover} />
+          <img alt="Login cover" src={LoginCover} />
         </Cover>
         <Button variant="outlined" IconLabel={GoogleIcon} onClick={login}>
           Login with google

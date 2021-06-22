@@ -1,4 +1,5 @@
 export interface Project {
+  ownerUid: string;
   sectionsOrder: string[];
   sections: {
     [sectionId: string]: {

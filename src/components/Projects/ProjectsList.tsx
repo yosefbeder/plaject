@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Project from './Project';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { useHistory } from 'react-router-dom';
-import { appActions } from '../../store/app-slice';
 import { authActions } from '../../store/auth-slice';
-import { useEffect } from 'react';
 import { db } from '../../firebase';
 
 const Container = styled.div`
@@ -14,10 +11,6 @@ const Container = styled.div`
   flex-direction: column;
   margin: 1.5rem 0;
   width: 100%;
-
-  /* @media (max-width: 600px) {
-    width: 75%;
-  } */
 `;
 
 const ProjectsList: React.FC<{

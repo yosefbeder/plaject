@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../../UI/Button';
 import { PlusLg } from 'react-bootstrap-icons';
 
 const Container = styled.div`
-  background-color: var(--color-grey-light);
   flex: 0 0 max-content;
+  background-color: var(--color-grey-light);
   display: flex;
   align-items: center;
   padding: 0 1rem;
@@ -26,8 +25,12 @@ const Container = styled.div`
     border: 2px solid var(--color-grey-dark);
   }
 
-  svg {
+  & svg {
     margin-right: 1rem;
+  }
+
+  & h3 {
+    width: max-content;
   }
 `;
 

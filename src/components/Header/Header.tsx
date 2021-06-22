@@ -8,7 +8,7 @@ import {
 import { IconButton } from '@material-ui/core';
 import Profile from './Profile';
 import DropdownWithLabel from '../../UI/DropdownWithLabel';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 
 import { auth } from '../../firebase';
 
@@ -37,7 +37,6 @@ const Container = styled.div`
 `;
 
 const Header: React.FC<{ openSidebar: () => void }> = ({ openSidebar }) => {
-  const dispatch = useAppDispatch();
   const selectedProject = useAppSelector(state => state.app.selectedProject);
   const projects = useAppSelector(state => state.auth.userInfo!.projects);
   const userInfo = useAppSelector(state => state.auth.userInfo);

@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { authActions } from '../store/auth-slice';
 import LoadingPage from '../pages/LoadingPage';
-import { setTimeout } from 'timers';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +18,6 @@ function App() {
   const getUserData = async (uid: string) => {
     const doc = await db.collection('users').doc(uid).get();
 
-    console.log(doc.data());
     return doc.data();
   };
 

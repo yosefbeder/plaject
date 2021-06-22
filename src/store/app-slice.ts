@@ -50,14 +50,16 @@ const appSlice = createSlice({
       );
     },
     addCard(state, action) {
-      const id = v4();
+      const id = action.payload.cardId;
       state.projectData!.cards[id] = {
         id,
         title: '',
         description: '',
         checklist: [],
       };
-      state.projectData!.sections[action.payload].cards.push(id);
+      state.projectData!.sections[action.payload.sectionId].cards.push(id);
+
+      action.payload.changeURL();
     },
     dragCard(state, action) {
       // splice the card from the source section

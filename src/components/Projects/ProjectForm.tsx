@@ -68,6 +68,7 @@ const ProjectForm: React.FC<{
   projectId?: string;
 }> = ({ showIn, onClose, type, projectId }) => {
   const projects = useAppSelector(state => state.auth.userInfo!.projects);
+  const userId = useAppSelector(state => state.auth.userId) as string;
   const dispatch = useAppDispatch();
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
@@ -92,6 +93,7 @@ const ProjectForm: React.FC<{
       if (type === 'add') {
         // adding the project the database
         const project: Project = {
+          ownerUid: userId,
           sectionsOrder: ['s1', 's2', 's3'],
           sections: {
             s1: { id: 's1', name: 'TODO', cards: [] },
@@ -133,7 +135,12 @@ const ProjectForm: React.FC<{
             size="small"
             label="Project Name"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={e => {
+              const value = e.target.value;
+              if (value.length < 24) {
+                setName(e.target.value);
+              }
+            }}
           />
           <FormControl size="small" variant="outlined">
             <InputLabel id="select-label">Project Color</InputLabel>

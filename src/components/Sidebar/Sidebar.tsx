@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Plus, PlusLg, X as CloseIcon } from 'react-bootstrap-icons';
+import { PlusLg, X as CloseIcon } from 'react-bootstrap-icons';
 import IconButton from '@material-ui/core/IconButton';
 import Logo from '../../UI/Logo';
 import Link from '../../UI/Link';

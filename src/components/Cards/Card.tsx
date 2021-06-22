@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
-import {
-  ListCheck,
-  PencilSquare,
-  JustifyLeft,
-  ThreeDots,
-  Trash,
-} from 'react-bootstrap-icons';
+import React from 'react';
+import { ListCheck, JustifyLeft, Trash } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { IconButton } from '@material-ui/core';
-import DropdownWithLabel from '../../UI/DropdownWithLabel';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { appActions } from '../../store/app-slice';
-import CardDetails from './CardDetails';
 import {
-  DraggableProps,
   DraggableProvidedDraggableProps,
   DraggableProvidedDragHandleProps,
 } from 'react-beautiful-dnd';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Container = styled.div`
   position: relative;
@@ -85,56 +76,51 @@ const Card = React.forwardRef<any, CardProps>(
     ref,
   ) => {
     const dispatch = useAppDispatch();
-    const [modalIsOpened, setModalIsOpened] = useState(false);
+    const history = useHistory();
+    const selectedProject = useAppSelector(state => state.app.selectedProject);
 
     const deleteCard = () => {
       dispatch(appActions.deleteCard({ sectionId, cardId: id }));
     };
 
     return (
-      <>
-        <Container
-          ref={ref}
-          {...draggableProps}
-          {...dragHandleProps}
-          style={{
-            ...draggableProps.style,
-            cursor: 'pointer',
+      <Container
+        ref={ref}
+        {...draggableProps}
+        {...dragHandleProps}
+        style={{
+          ...draggableProps.style,
+          cursor: 'pointer',
+        }}
+        onClick={e => history.push(`/project/${selectedProject}/card/${id}`)}
+      >
+        <div className="title">{title || 'Untitled'}</div>
+        <div className="badges">
+          {hasDescription && <JustifyLeft />}
+          {checklistInfo.total > 0 && (
+            <div
+              className={`checks ${
+                checklistInfo.total === checklistInfo.checked && 'finished'
+              } `}
+            >
+              <ListCheck />
+              <span>
+                {checklistInfo.checked}/{checklistInfo.total}
+              </span>
+            </div>
+          )}
+        </div>
+        <IconButton
+          className="btn"
+          onClick={e => {
+            e.stopPropagation();
+            deleteCard();
           }}
-          onClick={() => setModalIsOpened(true)}
+          size={hasDescription || checklistInfo.total > 0 ? 'medium' : 'small'}
         >
-          <div className="title">{title || 'Untitled'}</div>
-          <div className="badges">
-            {hasDescription && <JustifyLeft />}
-            {checklistInfo.total > 0 && (
-              <div
-                className={`checks ${
-                  checklistInfo.total === checklistInfo.checked && 'finished'
-                } `}
-              >
-                <ListCheck />
-                <span>
-                  {checklistInfo.checked}/{checklistInfo.total}
-                </span>
-              </div>
-            )}
-          </div>
-          <IconButton
-            className="btn"
-            onClick={deleteCard}
-            size={
-              hasDescription || checklistInfo.total > 0 ? 'medium' : 'small'
-            }
-          >
-            <Trash size={20} />
-          </IconButton>
-        </Container>
-        <CardDetails
-          id={id}
-          showIn={modalIsOpened}
-          onClose={() => setModalIsOpened(false)}
-        />
-      </>
+          <Trash size={20} />
+        </IconButton>
+      </Container>
     );
   },
 );

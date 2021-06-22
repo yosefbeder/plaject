@@ -1,12 +1,14 @@
-import { Checkbox, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import React from 'react';
 import { PlusLg, Trash } from 'react-bootstrap-icons';
 import styled from 'styled-components';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import Card from '../Cards/Card';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { appActions } from '../../store/app-slice';
 import Input from '../../UI/Input';
+import { v4 } from 'uuid';
+import { useHistory } from 'react-router-dom';
 
 const Container = styled.div`
   flex: 0 0 max-content;
@@ -52,6 +54,8 @@ interface SectionProps {
 const Section = React.forwardRef<any, SectionProps>(
   ({ id, name, cards, draggableProps, dragHandleProps }, ref) => {
     const dispatch = useAppDispatch();
+    const history = useHistory();
+    const selectedProject = useAppSelector(state => state.app.selectedProject);
 
     return (
       <Container {...draggableProps} ref={ref}>
@@ -64,6 +68,7 @@ const Section = React.forwardRef<any, SectionProps>(
             }}
             variant="h3"
             className="title"
+            placeholder="Untitled"
           />
           <IconButton
             style={{ marginLeft: 'auto', marginRight: '.25rem' }}
@@ -73,7 +78,20 @@ const Section = React.forwardRef<any, SectionProps>(
           >
             <Trash size={20} />
           </IconButton>
-          <IconButton onClick={() => dispatch(appActions.addCard(id))}>
+          <IconButton
+            onClick={() => {
+              const cardId = v4();
+              dispatch(
+                appActions.addCard({
+                  sectionId: id,
+                  cardId,
+                  changeURL: () => {
+                    history.push(`/project/${selectedProject}/card/${cardId}`);
+                  },
+                }),
+              );
+            }}
+          >
             <PlusLg size={18} />
           </IconButton>
         </div>
