@@ -59,20 +59,20 @@ const DropdownWithLabel: React.FC<{
       className={className}
     >
       {children}
-      <ClickAwayListener onClickAway={() => setIsOpened(false)}>
-        <CSSTransition
-          timeout={300}
-          in={isOpened}
-          classNames="fade"
-          unmountOnExit
-          mountOnEnter
-          nodeRef={nodeRef}
-        >
+      <CSSTransition
+        timeout={300}
+        in={isOpened}
+        classNames="fade"
+        unmountOnExit
+        mountOnEnter
+        nodeRef={nodeRef}
+      >
+        <ClickAwayListener onClickAway={() => setIsOpened(false)}>
           <div className="dropdown-container" ref={nodeRef}>
             <Dropdown items={listItems} responsive={responsive} />
           </div>
-        </CSSTransition>
-      </ClickAwayListener>
+        </ClickAwayListener>
+      </CSSTransition>
     </Container>
   );
 };
