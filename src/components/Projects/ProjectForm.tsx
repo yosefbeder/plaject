@@ -73,7 +73,7 @@ const ProjectForm: React.FC<{
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
 
-  const formIsValid = name.length > 6 && color.length > 0;
+  const formIsValid = name.length > 4 && color.length > 0;
 
   useEffect(() => {
     if (type === 'edit' && projectId) {
@@ -84,6 +84,7 @@ const ProjectForm: React.FC<{
   }, []);
 
   const submitHandler = (e: React.FormEvent) => {
+    console.log(formIsValid);
     e.preventDefault();
     if (formIsValid) {
       if (type === 'edit' && projectId) {
@@ -138,7 +139,7 @@ const ProjectForm: React.FC<{
             onChange={e => {
               const value = e.target.value;
               if (value.length < 24) {
-                setName(e.target.value);
+                setName(value);
               }
             }}
           />
