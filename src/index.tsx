@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 
 ReactDOM.render(
-  <Router>
+  <Router basename="/plaject">
     <Provider store={store}>
       <React.StrictMode>
         <App />
